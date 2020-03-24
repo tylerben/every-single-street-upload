@@ -21,7 +21,7 @@ datasetsService
   .putFeature({
     datasetId: "{DATESET ID}",
     featureId: converted.features[0].properties.name,
-    feature: converted.features[0]
+    feature: converted.features[0],
   })
   .send()
   .then(response => {
@@ -37,9 +37,9 @@ datasetsService
     const updateTileset = credentials => {
       uploadsService
         .createUpload({
-          mapId: "{TILESET ID OR NAME",
-          url: "{DATESET URL}",
-          tilesetName: "{TILESET NAME}"
+          mapId: "{ACCOUNT}.{TILESET NAME OR ID}",
+          url: "mapbox://datasets/ACCOUNT/{DATASET ID}",
+          tilesetName: "{TILESET NAME}",
         })
         .send()
         .then(response => {
@@ -47,7 +47,11 @@ datasetsService
         });
     };
 
-    getCredentials().then(updateTileset);
+    getCredentials()
+      .then(updateTileset)
+      .catch(err => {
+        console.error(`getCredentials error: ${err.message}`);
+      });
   })
   .catch(err => {
     console.error(err);
